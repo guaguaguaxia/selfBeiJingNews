@@ -13,9 +13,14 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.slefbeijingnews.com.activity.MainActivity;
 import com.slefbeijingnews.com.base.BasePager;
+import com.slefbeijingnews.com.base.MenuDetaiBasePager;
 import com.slefbeijingnews.com.domain.NewsCenterPagerBean;
 import com.slefbeijingnews.com.domain.NewsCenterPagerBean2;
 import com.slefbeijingnews.com.fragment.LeftmenuFragment;
+import com.slefbeijingnews.com.menudetailpager.InteracMenuDetailPager;
+import com.slefbeijingnews.com.menudetailpager.NewsMenuDetailPager;
+import com.slefbeijingnews.com.menudetailpager.PhotosMenuDetailPager;
+import com.slefbeijingnews.com.menudetailpager.TopicMenuDetailPager;
 import com.slefbeijingnews.com.utils.Constants;
 import com.slefbeijingnews.com.utils.LogUtil;
 
@@ -49,6 +54,11 @@ public class NewsCenterPager extends BasePager {
      */
     private List<NewsCenterPagerBean.DataEntity> data;
 
+    /**
+     * 详情页面的集合
+     */
+    private ArrayList<MenuDetaiBasePager> detaiBasePagers;
+
     public NewsCenterPager(Context context) {
         super(context);
     }
@@ -59,6 +69,7 @@ public class NewsCenterPager extends BasePager {
         //1.设置标题
         tv_title.setText("新闻中心");
         //2.联网请求，得到数据，创建视图
+        ib_menu.setVisibility(View.VISIBLE);
         TextView textView = new TextView(context);
         textView.setGravity(Gravity.CENTER);
         textView.setTextColor(Color.RED);
@@ -94,6 +105,13 @@ public class NewsCenterPager extends BasePager {
         MainActivity mainActivity = (MainActivity) context;
         //得到左侧菜单
         LeftmenuFragment leftmenuFragment = mainActivity.getLeftmenuFragment();
+
+        //添加详情页面
+        detaiBasePagers = new ArrayList<>();
+        detaiBasePagers.add(new NewsMenuDetailPager(context));//新闻详情页面
+        detaiBasePagers.add(new TopicMenuDetailPager(context));//专题详情页面
+        detaiBasePagers.add(new PhotosMenuDetailPager(context));//图组详情页面
+        detaiBasePagers.add(new InteracMenuDetailPager(context));//互动详情页面
 
         //把数据传递给左侧菜单
         leftmenuFragment.setData(data);
@@ -153,5 +171,14 @@ public class NewsCenterPager extends BasePager {
             }
         });
 
+    }
+
+    public void swichPager(int position) {
+        tv_title.setText(data.get(position).getTitle());
+        fl_content.removeAllViews();
+        MenuDetaiBasePager detaiBasePager = detaiBasePagers.get(position);
+        View rootView = detaiBasePager.rootView;
+        detaiBasePager.initData();
+        fl_content.addView(rootView);
     }
 }

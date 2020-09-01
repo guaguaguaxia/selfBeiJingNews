@@ -3,6 +3,8 @@ package com.slefbeijingnews.com.fragment;
 
 import android.view.View;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
 import androidx.viewpager.widget.ViewPager;
 import com.example.slefbeijingnews.R;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -145,5 +147,14 @@ public class ContentFragment extends BaseFragment {
         MainActivity mainActivity = (MainActivity) context;
         mainActivity.getSlidingMenu().setTouchModeAbove(touchmodeFullscreen);
     }
+
+    /**
+     * 得到新闻中心
+     * @return
+     */
+    public NewsCenterPager getNewsCenterPager() {
+        return (NewsCenterPager) basePagers.get(1);
+    }
+
 
 }
