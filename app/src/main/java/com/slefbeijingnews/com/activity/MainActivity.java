@@ -84,18 +84,18 @@ public class MainActivity extends SlidingFragmentActivity {
      * 得到左侧菜单Fragment
      * @return
      */
-//    public LeftmenuFragment getLeftmenuFragment() {
-////        FragmentManager fm = getSupportFragmentManager();
-////        LeftmenuFragment leftmenuFragment = (LeftmenuFragment) fm.findFragmentByTag(LEFTMENU_TAG);
-//
-//        return  (LeftmenuFragment) getSupportFragmentManager().findFragmentByTag(LEFTMENU_TAG);
-//    }
-//
-//    /**
-//     * 得到正文Fragment
-//     * @return
-//     */
-//    public ContentFragment getContentFragment() {
-//        return  (ContentFragment) getSupportFragmentManager().findFragmentByTag(MAIN_CONTENT_TAG);
-//    }
+    public LeftmenuFragment getLeftmenuFragment() {
+//        FragmentManager fm = getSupportFragmentManager();
+//        LeftmenuFragment leftmenuFragment = (LeftmenuFragment) fm.findFragmentByTag(LEFTMENU_TAG);
+
+        return  (LeftmenuFragment) getSupportFragmentManager().findFragmentByTag(LEFTMENU_TAG);
+    }
+
+    /**
+     * 得到正文Fragment
+     * @return
+     */
+    public ContentFragment getContentFragment() {
+        return  (ContentFragment) getSupportFragmentManager().findFragmentByTag(MAIN_CONTENT_TAG);
+    }
 }

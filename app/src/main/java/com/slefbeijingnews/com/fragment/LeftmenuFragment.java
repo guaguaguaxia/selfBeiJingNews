@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.slefbeijingnews.R;
 import com.slefbeijingnews.com.activity.MainActivity;
 import com.slefbeijingnews.com.base.BaseFragment;
+import com.slefbeijingnews.com.domain.NewsCenterPagerBean;
 import com.slefbeijingnews.com.domain.NewsCenterPagerBean2;
 import com.slefbeijingnews.com.utils.DensityUtil;
 import com.slefbeijingnews.com.utils.LogUtil;
@@ -28,7 +29,7 @@ import java.util.List;
 public class LeftmenuFragment extends BaseFragment {
 
 
-    private List<NewsCenterPagerBean2.DetailPagerData> data;
+    private List<NewsCenterPagerBean.DataEntity> data;
 
 //    private LeftmenuFragmentAdapter adapter;
 
@@ -101,20 +102,20 @@ public class LeftmenuFragment extends BaseFragment {
      * 接收数据
      * @param data
      */
-//    public void setData(List<NewsCenterPagerBean2.DetailPagerData> data) {
-//        this.data = data;
-//        for(int i=0;i<data.size();i++){
-//            LogUtil.e("title=="+data.get(i).getTitle());
-//        }
-//
+    public void setData(List<NewsCenterPagerBean.DataEntity> data) {
+        this.data = data;
+        for(int i=0;i<data.size();i++){
+            LogUtil.e("title=="+data.get(i).getTitle());
+        }
+
 //        //设置适配器
-//        adapter   = new LeftmenuFragmentAdapter();
+//        adapter = new LeftmenuFragmentAdapter();
 //        listView.setAdapter(adapter);
 //
 //       //设置默认页面
 //        swichPager(prePosition);
-//
-//    }
+
+    }
 
 
 //    class LeftmenuFragmentAdapter extends BaseAdapter {
