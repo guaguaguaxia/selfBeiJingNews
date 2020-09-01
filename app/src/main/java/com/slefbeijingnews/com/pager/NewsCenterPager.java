@@ -21,6 +21,7 @@ import com.slefbeijingnews.com.menudetailpager.InteracMenuDetailPager;
 import com.slefbeijingnews.com.menudetailpager.NewsMenuDetailPager;
 import com.slefbeijingnews.com.menudetailpager.PhotosMenuDetailPager;
 import com.slefbeijingnews.com.menudetailpager.TopicMenuDetailPager;
+import com.slefbeijingnews.com.utils.CacheUtils;
 import com.slefbeijingnews.com.utils.Constants;
 import com.slefbeijingnews.com.utils.LogUtil;
 
@@ -52,7 +53,7 @@ public class NewsCenterPager extends BasePager {
     /**
      * 左侧菜单对应的数据集合
      */
-    private List<NewsCenterPagerBean.DataEntity> data;
+    private List<NewsCenterPagerBean2.DetailPagerData> data;
 
     /**
      * 详情页面的集合
@@ -62,6 +63,7 @@ public class NewsCenterPager extends BasePager {
     public NewsCenterPager(Context context) {
         super(context);
     }
+
     @Override
     public void initData() {
         super.initData();
@@ -80,6 +82,13 @@ public class NewsCenterPager extends BasePager {
         //4.绑定数据
         textView.setText("新闻中心内容");
 
+        //得到缓存数据
+        String saveJson = CacheUtils.getString(context, Constants.NEWSCENTER_PAGER_URL);//""
+
+//        if (!TextUtils.isEmpty(saveJson)) {
+//            processData(saveJson);
+//        }
+
         getDataFromNet();
     }
 
@@ -91,8 +100,8 @@ public class NewsCenterPager extends BasePager {
      */
     private void processData(String json) {
 
-        NewsCenterPagerBean bean = parsedJson(json);
-//        NewsCenterPagerBean2 bean = parsedJson2(json);
+//        NewsCenterPagerBean bean = parsedJson(json);
+        NewsCenterPagerBean2 bean = parsedJson2(json);
 //        String title = bean.getData().get(0).getChildren().get(1).getTitle();
 
 
@@ -108,7 +117,7 @@ public class NewsCenterPager extends BasePager {
 
         //添加详情页面
         detaiBasePagers = new ArrayList<>();
-        detaiBasePagers.add(new NewsMenuDetailPager(context));//新闻详情页面
+        detaiBasePagers.add(new NewsMenuDetailPager(context, data.get(0)));//新闻详情页面
         detaiBasePagers.add(new TopicMenuDetailPager(context));//专题详情页面
         detaiBasePagers.add(new PhotosMenuDetailPager(context));//图组详情页面
         detaiBasePagers.add(new InteracMenuDetailPager(context));//互动详情页面
@@ -121,7 +130,7 @@ public class NewsCenterPager extends BasePager {
 
     private NewsCenterPagerBean parsedJson(String json) {
         Gson gson = new Gson();
-        NewsCenterPagerBean bean = gson.fromJson(json,NewsCenterPagerBean.class);
+        NewsCenterPagerBean bean = gson.fromJson(json, NewsCenterPagerBean.class);
         return bean;
 //        return new Gson().fromJson(json, NewsCenterPagerBean2.class);
     }
@@ -133,7 +142,7 @@ public class NewsCenterPager extends BasePager {
     private void getDataFromNet() {
 
         RequestParams params = new RequestParams(Constants.NEWSCENTER_PAGER_URL);
-        params.addHeader("Connection","close");
+        params.addHeader("Connection", "close");
         params.setConnectTimeout(6000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -147,7 +156,7 @@ public class NewsCenterPager extends BasePager {
 
                 processData(result);
                 //缓存数据
-//                CacheUtils.putString(context,Constants.NEWSCENTER_PAGER_URL,result);
+                CacheUtils.putString(context, Constants.NEWSCENTER_PAGER_URL, result);
 //
 //                processData(result);
                 //设置适配器
@@ -171,6 +180,97 @@ public class NewsCenterPager extends BasePager {
             }
         });
 
+    }
+
+    /**
+     * 使用Android系统自带的API解析json数据
+     *
+     * @param json
+     * @return
+     */
+    private NewsCenterPagerBean2 parsedJson2(String json) {
+        NewsCenterPagerBean2 bean2 = new NewsCenterPagerBean2();
+        try {
+            JSONObject object = new JSONObject(json);
+
+
+            int retcode = object.optInt("retcode");
+            bean2.setRetcode(retcode);//retcode字段解析成功
+
+            JSONArray data = object.optJSONArray("data");
+            if (data != null && data.length() > 0) {
+
+                List<NewsCenterPagerBean2.DetailPagerData> detailPagerDatas = new ArrayList<>();
+                //设置列表数据
+                bean2.setData(detailPagerDatas);
+                //for循环，解析每条数据
+                for (int i = 0; i < data.length(); i++) {
+
+                    JSONObject jsonObject = (JSONObject) data.get(i);
+
+                    NewsCenterPagerBean2.DetailPagerData detailPagerData = new NewsCenterPagerBean2.DetailPagerData();
+                    //添加到集合中
+                    detailPagerDatas.add(detailPagerData);
+
+                    int id = jsonObject.optInt("id");
+                    detailPagerData.setId(id);
+                    int type = jsonObject.optInt("type");
+                    detailPagerData.setType(type);
+                    String title = jsonObject.optString("title");
+                    detailPagerData.setTitle(title);
+                    String url = jsonObject.optString("url");
+                    detailPagerData.setUrl(url);
+                    String url1 = jsonObject.optString("url1");
+                    detailPagerData.setUrl1(url1);
+                    String dayurl = jsonObject.optString("dayurl");
+                    detailPagerData.setDayurl(dayurl);
+                    String excurl = jsonObject.optString("excurl");
+                    detailPagerData.setExcurl(excurl);
+                    String weekurl = jsonObject.optString("weekurl");
+                    detailPagerData.setWeekurl(weekurl);
+
+
+                    JSONArray children = jsonObject.optJSONArray("children");
+                    if (children != null && children.length() > 0) {
+
+                        List<NewsCenterPagerBean2.DetailPagerData.ChildrenData> childrenDatas = new ArrayList<>();
+
+                        //设置集合-ChildrenData
+                        detailPagerData.setChildren(childrenDatas);
+
+                        for (int j = 0; j < children.length(); j++) {
+                            JSONObject childrenitem = (JSONObject) children.get(j);
+
+                            NewsCenterPagerBean2.DetailPagerData.ChildrenData childrenData = new NewsCenterPagerBean2.DetailPagerData.ChildrenData();
+                            //添加到集合中
+                            childrenDatas.add(childrenData);
+
+
+                            int childId = childrenitem.optInt("id");
+                            childrenData.setId(childId);
+                            String childTitle = childrenitem.optString("title");
+                            childrenData.setTitle(childTitle);
+                            String childUrl = childrenitem.optString("url");
+                            childrenData.setUrl(childUrl);
+                            int childType = childrenitem.optInt("type");
+                            childrenData.setType(childType);
+
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return bean2;
     }
 
     public void swichPager(int position) {

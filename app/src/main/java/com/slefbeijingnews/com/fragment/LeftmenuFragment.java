@@ -30,7 +30,7 @@ import java.util.List;
 public class LeftmenuFragment extends BaseFragment {
 
 
-    private List<NewsCenterPagerBean.DataEntity> data;
+    private List<NewsCenterPagerBean2.DetailPagerData> data;
 
     private LeftmenuFragmentAdapter adapter;
 
@@ -53,7 +53,7 @@ public class LeftmenuFragment extends BaseFragment {
         listView.setCacheColorHint(Color.TRANSPARENT);
 
         //设置按下listView的item不变色
-        listView.setSelector(android.R.color.transparent);
+//        listView.setSelector(android.R.color.transparent);
 
         //设置item的点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,7 +98,7 @@ public class LeftmenuFragment extends BaseFragment {
      * 接收数据
      * @param data
      */
-    public void setData(List<NewsCenterPagerBean.DataEntity> data) {
+    public void setData(List<NewsCenterPagerBean2.DetailPagerData> data) {
         this.data = data;
         for(int i=0;i<data.size();i++){
             LogUtil.e("title=="+data.get(i).getTitle());
