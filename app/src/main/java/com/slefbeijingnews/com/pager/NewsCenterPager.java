@@ -33,6 +33,10 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +94,10 @@ public class NewsCenterPager extends BasePager {
 //        }
 
         getDataFromNet();
+
     }
+
+
 
 
     /**
@@ -156,7 +163,7 @@ public class NewsCenterPager extends BasePager {
 
                 processData(result);
                 //缓存数据
-                CacheUtils.putString(context, Constants.NEWSCENTER_PAGER_URL, result);
+//                CacheUtils.putString(context, Constants.NEWSCENTER_PAGER_URL, result);
 //
 //                processData(result);
                 //设置适配器
